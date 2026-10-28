@@ -1,4 +1,5 @@
 const inventory = [];
+const horse = [];
 let room = "улица";
 
 function showInventory() {
@@ -64,7 +65,7 @@ while (true) {
         else alert("Нет такого варианта.");
     }
 
-    // ТРЕНЕРСКАЯ (поговорить с тренером)
+    // ТРЕНЕРСКАЯ 
     else if (room === "тренерская") {
         const choice = prompt(
             "ТРЕНЕРСКАЯ\n" +
@@ -82,9 +83,9 @@ while (true) {
                 if (takeKey === true) {
                     inventory.push("тренер");
                     alert(
-                    "сегодня у тебя тренировка на лошади по кличке Кузя \n" +
-                    "поседлай его и иди в манеж, я подойду чуть позже\n" +
-                    "не забудь взять в раздевалке свой шлем и хлыст" 
+                        "сегодня у тебя тренировка на лошади по кличке Кузя \n" +
+                        "поседлай его и иди в манеж, я подойду чуть позже\n" +
+                        "не забудь взять в раздевалке свой шлем и хлыст"
                     );
                 } else {
                     alert("Вы оставили тренера в покое.\n" +
@@ -98,7 +99,7 @@ while (true) {
         }
     }
 
-    // РАЗДЕВАЛКА (ВЗЯТЬ ШЛЕМ)
+    // РАЗДЕВАЛКА 
     else if (room === "раздевалка") {
         const choice = prompt(
             "РАЗДЕВАЛКА\n" +
@@ -172,7 +173,7 @@ while (true) {
         }
 
     }
-    // АМУНИЧНИК (ВЗЯТЬ ЭКИПИРОВКУ)
+    // АМУНИЧНИК 
     if (room === "амуничник") {
         const choice = prompt(
             "АМУНИЧНИК\n" +
@@ -282,7 +283,7 @@ while (true) {
         }
 
     }
-    // ДЕННИК (ВЗЯТЬ ЛОШАДЬ)
+    // ДЕННИК
     else if (room === "денник Кузи") {
         const choice = prompt(
             "ДЕННИК КУЗИ\n" +
@@ -294,6 +295,8 @@ while (true) {
 
         if (choice === "0" || choice === null) {
             break;
+        } else if (choice === "3") {
+            room = "конюшня";
         } else if (choice === "1") {
             if (inventory.includes("лошадь")) {
                 alert("Вы уже вывели Кузю");
@@ -308,8 +311,65 @@ while (true) {
                     alert("Вы оставили его жевать сено");
                 }
             }
-        } else if (choice === "3") {
-            room = "конюшня";
+
+        } else if (choice === "2") {
+            const choice = prompt(
+                "1 — надеть уздечку\n" +
+                "2 — надеть вальтрап\n" +
+                "3 — надеть седло\n" +
+                "4 — надеть подпругу"
+            );
+            if (choice === "1") {
+                if (horse.includes("уздечка")) {
+                    alert("Вы уже надели уздеку");
+                } else {
+                    if (inventory.includes("уздечка")) {
+                        horse.push("уздечка")  
+                        inventory.splice(inventory.indexOf("уздечка"), 1);
+                        alert("вы надели уздечку")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+                    } else {
+                        alert("для начала возьмите уздечку")
+                    }
+                }
+            }else if (choice === "2") {
+                if (horse.includes("вальтрап")) {
+                    alert("Вы уже надели вальтрап");
+                } else {
+                    if (inventory.includes("вальтрап")) {
+                        horse.push("вальтрап")  
+                        inventory.splice(inventory.indexOf("вальтрап"), 1);
+                        alert("вы надели вальтрап")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+                    } else {
+                        alert("для начала возьмите вальтрап")
+                    }
+                }
+            }else if (choice === "3") {
+                if (horse.includes("седло")) {
+                    alert("Вы уже надели седло");
+                } else {
+                    if (inventory.includes("седло")) {
+                        horse.push("седло")  
+                        inventory.splice(inventory.indexOf("седло"), 1);
+                        alert("вы надели седло")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+                    } else {
+                        alert("для начала возьмите седло")
+                    }
+                }
+            }else if (choice === "2") {
+                if (horse.includes("подпруга")) {
+                    alert("Вы уже надели подпругу");
+                } else {
+                    if (inventory.includes("подпруга")) {
+                        horse.push("подпруга")  
+                        inventory.splice(inventory.indexOf("подпруга"), 1);
+                        alert("вы надели подпругу")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+                    } else {
+                        alert("для начала возьмите подпругу")
+                    }
+                }
+            }
+
+
         } else {
             alert("Такого действия нет.");
         }
@@ -355,18 +415,18 @@ while (true) {
             if (!inventory.includes("тренер")) {
                 alert("тренер даже не пришел к вам")
                 break
-            }if (!inventory.includes("шлем")) {
+            } if (!inventory.includes("шлем")) {
                 alert("безопасность превыше всего")
                 break
             } if (!inventory.includes("хлыст")) {
                 alert("вы не справились с управлением")
                 break
-            } if(!inventory.includes("седло" || "вальтрап" || " уздечка" || "подпруга")){
+            } if (!horse.includes("седло" || "вальтрап" || " уздечка" || "подпруга")) {
                 alert("вы не поседлали лошадь")
                 break
-            }else{
+            } else {
                 alert("тренировка прошла хорошо")
-                if(inventory.includes("морковь")){
+                if (inventory.includes("морковь")) {
                     alert("вы похвалили лошадь после тренировки")
                 }
             }
