@@ -1,6 +1,13 @@
-const inventory = [];
-const horse = [];
+const inventory = []; //рюгзак
+const horse = [];  //чтобы седлать лошадь
 let room = "улица";
+
+let rulesKnown = false; // разговор с тренером
+let fedHorse = false; // кормили ли лошадь
+let sugarFed = false; // кормили ли сахаром
+let carrotWarningGiven = false;// предупреждение конюха
+let greetedGroom = false;// знакомство с конюхом
+
 
 function showInventory() {
     if (inventory.length === 0) {
@@ -246,56 +253,73 @@ while (true) {
             alert("Такого действия нет.");
         }
     }
-    // КОРМОВАЯ (ВЗЯТЬ МОРКОВЬ)
+    // КОРМОВАЯ 
     else if (room === "кормовая") {
-        const choice = prompt(
-            "КОРМОВАЯ\n" +
-            "Вы заходите в кормовую и встречаете там конюха.\n" +
-            "–Здравствуйте, вам нужна морковка для лошади?.\n" +
-            "1 — Поздороваться в ответ и взять морковку\n" +
-            "2 — проигнорировать и молча взять морковку\n" +
-            "3 — Вернуться в конюшню\n" +
-            "0 — Завершить игру"
-        );
-
-        if (choice === "0" || choice === null) {
-            break;
-        } else if (choice === "1") {
-            if (inventory.includes("морковь")) {
-                alert("Вы уже взяли морковку");
+        if (greeted === false) {
+            const choice = prompt(
+                "КОРМОВАЯ\n" +
+                "Вы заходите в кормовую и видите там конюха, который перебирает мешки с кормом.\n" +
+                "он поднимает голову и здороваеться с вами.\n" +
+                "1 — Поздороваться в ответ \n" +
+                "2 — проигнорировать"
+            );
+            if (choice === "2") {
+                alert("вы прошли мимо, Конюх крикнул вслед: Даже не поздоровался!\n" +
+                    "Вас наказали за грубость");
+                break
+            } else if (choice === "1") {
+                let takingFood = true;
+                alert("Конюх улыбнулся вам в ответ")
             } else {
-                const takeKey = confirm("В корзине лежит морковка. Взять ее?");
-
-                if (takeKey === true) {
-                    inventory.push("морковь");
-                    alert("Вы положили морковку в карман");
-                } else {
-                    alert("Вы оставили морковку в корзине");
-                }
+                alert("Такого действия нет.");
+                continue
             }
-        } else if (choice === "2") {
-            alert("ты повел себя грубо, конюх пожаловался трениру и вас наказали")
-            break
-        } else if (choice === "3") {
-            room = "конюшня";
-        } else {
-            alert("Такого действия нет.");
+        }
+        let takingFood = true;
+        while (takingFood) {
+            const choice = promt(
+                "Конюх: Что то хотели?\n" +
+                "1 – Взять морковь\n" +
+                "2 – Взять сахар\n" +
+                "3 – Вернуться в конюшню"
+            );
+            if (choice === "3") {
+                takingFood = false;
+                room = "конюшня"
+            } else if (choice === "1") {
+                inventory.push("морковь")
+                alert("вы взяли морковку")
+
+            } else if (choice === "2") {
+                inventory.push("сахар")
+                if (carrotWarningGiven === false) {
+                    alert("конюх: сахар возьми, но запомни что лошади можно не более одного кусочка, инае ей станет плохо")
+                    carrotWarningGiven = true
+
+                } else {
+                    alert("вы взяли сахар")
+                }
+            } else {
+                alert("Такого действия нет.");
+            }
         }
 
     }
-    // ДЕННИК
+
+    // ДЕННИК КУЗИ
     else if (room === "денник Кузи") {
         const choice = prompt(
             "ДЕННИК КУЗИ\n" +
             "1 — Вывести Кузю из денника\n" +
             "2 — Поседлать Кузю\n" +
-            "3 — Выйти в конюшню\n" +
+            "3 — Покормить Кузю\n" +
+            "4 — Выйти в конюшню\n" +
             "0 — Завершить игру"
         );
 
         if (choice === "0" || choice === null) {
             break;
-        } else if (choice === "3") {
+        } else if (choice === "4") {
             room = "конюшня";
         } else if (choice === "1") {
             if (inventory.includes("лошадь")) {
@@ -311,8 +335,52 @@ while (true) {
                     alert("Вы оставили его жевать сено");
                 }
             }
+        }
 
-        } else if (choice === "2") {
+        // КОРМЛЕНИЕ
+        else if(choice ==="3"){
+            let feeding = true;
+            while(feeding){
+                const feed = promt(
+                    "Чем вы хотите угостить Кузю\n" +
+                    "1 – морковкой\n" +
+                    "2 – сахаром\n" +
+                    "3 – ничем"
+                );
+                if(feed === "3"){
+                    feeding = false
+                }else if (feed ==="1"){
+                    if (inventory.includes("морковь")){
+                        inventory.splice(inventory.indexOf("морковь"),1);
+                        fedHorse = true;
+                        alert("кузя с хрустом сьел морковку, теперь он доволен")
+                    }else{
+                        alert("у вас нет морковки")
+                    }
+                }
+                else if(feed === "2"){
+                    if(inventory.includes("сахар")){
+                        if (sugarFed === true){
+                            alert("можно давать только один кусочек сахара, кузе может стать плохо")
+                            alert("игра окончена, вы не соблюдаете правил и можете навредить здоворью лошади")
+                            break
+                        }else{
+                            inventory.splice(inventory.indexOf("сахар"),1);
+                            fedHorse = true;
+                            sugarFed = true;
+                            alert("Кузя аккуратно взял сахарок")
+                        }
+                    }else{
+                        ("У вас нет сахара")
+                    }
+                }else{
+                    alert("Такого действия нет.");
+                }
+            }
+        }
+
+            //СЕДЛОВКА
+        else if (choice === "2") {
             const choice = prompt(
                 "1 — надеть уздечку\n" +
                 "2 — надеть вальтрап\n" +
@@ -324,58 +392,60 @@ while (true) {
                     alert("Вы уже надели уздеку");
                 } else {
                     if (inventory.includes("уздечка")) {
-                        horse.push("уздечка")  
+                        horse.push("уздечка")
                         inventory.splice(inventory.indexOf("уздечка"), 1);
-                        alert("вы надели уздечку")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+                        alert("вы надели уздечку")
                     } else {
                         alert("для начала возьмите уздечку")
                     }
                 }
-            }else if (choice === "2") {
-                if (horse.includes("вальтрап")) {
+            } else if (choice === "2") {
+                if (!horse.includes("уздечка")) {
+                    alert("Сначала наденьте уздечку")
+                } else if (horse.includes("вальтрап")) {
                     alert("Вы уже надели вальтрап");
+                } else if (inventory.includes("вальтрап")) {
+                    horse.push("вальтрап")
+                    inventory.splice(inventory.indexOf("вальтрап"), 1);
+                    alert("вы надели вальтрап")
                 } else {
-                    if (inventory.includes("вальтрап")) {
-                        horse.push("вальтрап")  
-                        inventory.splice(inventory.indexOf("вальтрап"), 1);
-                        alert("вы надели вальтрап")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-                    } else {
-                        alert("для начала возьмите вальтрап")
-                    }
+                    alert("для начала возьмите вальтрап")
                 }
-            }else if (choice === "3") {
-                if (horse.includes("седло")) {
+
+            } else if (choice === "3") {
+                if (!horse.includes("вальтрап")) {
+                    alert("сначала наденьте вальтрап")
+                } else if (horse.includes("седло")) {
                     alert("Вы уже надели седло");
+                } else if (inventory.includes("седло")) {
+                    horse.push("седло")
+                    inventory.splice(inventory.indexOf("седло"), 1);
+                    alert("вы надели седло")
                 } else {
-                    if (inventory.includes("седло")) {
-                        horse.push("седло")  
-                        inventory.splice(inventory.indexOf("седло"), 1);
-                        alert("вы надели седло")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-                    } else {
-                        alert("для начала возьмите седло")
-                    }
+                    alert("для начала возьмите седло")
                 }
-            }else if (choice === "2") {
-                if (horse.includes("подпруга")) {
+            }
+            else if (choice === "4") {
+                if (!horse.includes("седло")) {
+                    alert("сначала наденьте седло")
+                } else if (horse.includes("подпруга")) {
                     alert("Вы уже надели подпругу");
                 } else {
                     if (inventory.includes("подпруга")) {
-                        horse.push("подпруга")  
+                        horse.push("подпруга")
                         inventory.splice(inventory.indexOf("подпруга"), 1);
-                        alert("вы надели подпругу")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+                        alert("вы надели подпругу")
                     } else {
                         alert("для начала возьмите подпругу")
                     }
                 }
             }
-
-
         } else {
             alert("Такого действия нет.");
         }
     }
 
-
+    //ФЕДЯ
     else if (room === "денник Феди") {
         const choice = prompt(
             "ДЕННИК ФЕДИ\n" +
@@ -394,10 +464,9 @@ while (true) {
             break
 
         }
-
-
     }
-    // МАНЕЖ (ФИНАЛ)
+
+    // МАНЕЖ 
     else if (room === "манеж") {
 
         const choice = prompt(
@@ -421,7 +490,7 @@ while (true) {
             } if (!inventory.includes("хлыст")) {
                 alert("вы не справились с управлением")
                 break
-            } if (!horse.includes("седло" || "вальтрап" || " уздечка" || "подпруга")) {
+            } if (!horse.includes("седло") || !horse.includes("вальтрап") || !horse.includes("уздечка") || !horse.includes("подпруга")) {
                 alert("вы не поседлали лошадь")
                 break
             } else {
@@ -433,5 +502,4 @@ while (true) {
         }
     }
 }
-
 alert("Игра завершена.");
