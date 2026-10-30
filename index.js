@@ -45,7 +45,6 @@ while (true) {
             } else {
                 room = "манеж";
             }
-            room = "манеж";
         } else if (choice === "2") {
             room = "дом";
         } else if (choice === "3") {
@@ -82,48 +81,63 @@ while (true) {
         )
         if (choice === "0" || choice === null) {
             break;
-        }else if (choice === "2") {
+        } else if (choice === "2") {
             room = "дом";
         } else if (choice === "1") {
             const greeting = prompt(
-                "здравствуйте,вы на тренировку?"
-            )
-            const talk = confirm("поговорить с тренером?");
-            if (talk === true) {
+                "«Здравствуй! Ты сегодня на тренировку?»\n\n" +
+                "1 — «Здравствуйте! Да, я на тренировку.»\n" +
+                "2 — «Давай быстрее, мне еще собираться.»"
+            );
+
+            if (greeting === "2") {
+                alert("«Раз ты так спешишь, то не буду тебя задерживать. Тренировки не будет. Всего доброго.»");
+                alert(" Вас выгнали за неуважение.");
+                break;
+            }
+
+            else if (greeting === "1") {
+                alert("Тренер: «Молодец. Сегодня тренировка на Кузе. Иди в конюшню и поседлай его. Я подойду в манеж позже.»");
                 rulesKnown = true;
-                alert(
-                    "сегодня у тебя тренировка на лошади по кличке Кузя \n" +
-                    "поседлай его и иди в манеж, я подойду чуть позже"
-                );
+
+                // вопросы
                 let talking = true;
                 while (talking) {
-                    const question = promt(
-                        "Тренер смотрит на вас, что скажите?\n\n" +
-                        "1 – А как правильно седлать лошадь?\n" +
-                        "2 – Спасибо, а нужно ли что то еще?\n" +
-                        "3 – Сам разберусь, уже сто раз это делал\n" +
-                        "4 – Все понятно, пойду собираться"
-                    )
-                    if (question = "3") {
-                        alert("раз сам разберешься то и сам потренируешься, я не буду тебя тренировать");
-                        break;
-                    } else if (choice === "1") {
-                        alert("Сначала уздечка, потом вальтрап, седло и затяни подпругу");
-                    } else if (choice === "2") {
-                        alert("Не забудь хлыст и шлем");
-                    }else if (choice === "4") {
-                        alert("Удачи!");
-                        room = "дом"
-                    } else {
-                        alert("Такого варианта нет.");
-                    }
+                    const question = prompt(
+                        "Тренер смотрит на вас, ожидая вопросов.\n\n" +
+                        "1 — «Спасибо! А нужно ли мне что-то еще?»\n" +
+                        "2 — «Подскажите, пожалуйста, как правильно седлать лошадь?»\n" +
+                        "3 — «Понял, я пошел собираться.»\n" +
+                        "4 — «Да я уже сто раз это делал, сам разберусь.»"
+                    );
 
+                    if (question === "4") {
+                        alert("«Раз сам разберешься — может, и сам потренируешься? Я тогда пойду.»");
+                        alert("Тренер ушел. Тренировка сорвана.");
+                        room = "конец";
+                        break;
+                    }
+                    else if (question === "1") {
+                        alert("Тренер: «Не забудь надеть шлем и взять хлыст.»");
+                    }
+                    else if (question === "2") {
+                        alert("Тренер: «Сначала уздечка, потом вальтрап, затем седло. И в конце подпруга.»");
+                    }
+                    else if (question === "3" || question === null) {
+                        talking = false;
+                        alert("Тренер: «Удачи!»");
+                    }
+                    else {
+                        alert("Тренер: «Я не понимаю, о чем ты.»");
+                    }
                 }
-            } 
-        } 
-        else {
+            } else {
+                alert("Нет такого варианта.");
+            }
+        } else {
             alert("Такого действия нет.");
         }
+        if (room === "конец") break;
     }
 
     // РАЗДЕВАЛКА 
@@ -275,11 +289,10 @@ while (true) {
     }
     // КОРМОВАЯ 
     else if (room === "кормовая") {
-        if (greeted === false) {
+        if (greetedGroom === false) {
             const choice = prompt(
                 "КОРМОВАЯ\n" +
-                "Вы заходите в кормовую и видите там конюха, который перебирает мешки с кормом.\n" +
-                "он поднимает голову и здороваеться с вами.\n" +
+                "Вы заходите в кормовую и видите там конюха. Он здоровается с вами.\n" +
                 "1 — Поздороваться в ответ \n" +
                 "2 — проигнорировать"
             );
@@ -288,7 +301,7 @@ while (true) {
                     "Вас наказали за грубость");
                 break
             } else if (choice === "1") {
-                let takingFood = true;
+                greetedGroom = true;
                 alert("Конюх улыбнулся вам в ответ")
             } else {
                 alert("Такого действия нет.");
@@ -297,7 +310,7 @@ while (true) {
         }
         let takingFood = true;
         while (takingFood) {
-            const choice = promt(
+            const choice = prompt(
                 "Конюх: Что то хотели?\n" +
                 "1 – Взять морковь\n" +
                 "2 – Взять сахар\n" +
@@ -309,13 +322,11 @@ while (true) {
             } else if (choice === "1") {
                 inventory.push("морковь")
                 alert("вы взяли морковку")
-
             } else if (choice === "2") {
                 inventory.push("сахар")
                 if (carrotWarningGiven === false) {
-                    alert("конюх: сахар возьми, но запомни что лошади можно не более одного кусочка, инае ей станет плохо")
+                    alert("конюх: «Сахар возьми, но лошади можно не больше одного кусочка, иначе ей станет плохо!»");
                     carrotWarningGiven = true
-
                 } else {
                     alert("вы взяли сахар")
                 }
@@ -345,7 +356,7 @@ while (true) {
             if (inventory.includes("лошадь")) {
                 alert("Вы уже вывели Кузю");
             } else {
-                const takeKey = confirm("Кузя спокойно жует сено. Вывести?");
+                const takeKey = confirm("Вывести Кузю?");
 
                 if (takeKey === true) {
                     inventory.push("лошадь");
@@ -361,7 +372,7 @@ while (true) {
         else if (choice === "3") {
             let feeding = true;
             while (feeding) {
-                const feed = promt(
+                const feed = prompt(
                     "Чем вы хотите угостить Кузю\n" +
                     "1 – морковкой\n" +
                     "2 – сахаром\n" +
@@ -373,7 +384,7 @@ while (true) {
                     if (inventory.includes("морковь")) {
                         inventory.splice(inventory.indexOf("морковь"), 1);
                         fedHorse = true;
-                        alert("кузя с хрустом сьел морковку, теперь он доволен")
+                        alert("Кузя с хрустом сьел морковку!")
                     } else {
                         alert("у вас нет морковки")
                     }
@@ -381,8 +392,9 @@ while (true) {
                 else if (feed === "2") {
                     if (inventory.includes("сахар")) {
                         if (sugarFed === true) {
-                            alert("можно давать только один кусочек сахара, кузе может стать плохо")
-                            alert("игра окончена, вы не соблюдаете правил и можете навредить здоворью лошади")
+                            alert("Вы дали второй кусочек сахара... Кузе может стать плохо.")
+                            alert("игра окончена, вы  можете навредить здоворью лошади")
+                            room = "конец";
                             break
                         } else {
                             inventory.splice(inventory.indexOf("сахар"), 1);
@@ -391,7 +403,7 @@ while (true) {
                             alert("Кузя аккуратно взял сахарок")
                         }
                     } else {
-                        ("У вас нет сахара")
+                        alert("У вас нет сахара")
                     }
                 } else {
                     alert("Такого действия нет.");
@@ -401,69 +413,73 @@ while (true) {
 
         //СЕДЛОВКА
         else if (choice === "2") {
-            const choice = prompt(
-                "1 — надеть уздечку\n" +
-                "2 — надеть вальтрап\n" +
-                "3 — надеть седло\n" +
-                "4 — надеть подпругу\n" +
-                "0 — отмена"
-            );
-            if (choice === "0") {
-                continue
-            }
-            else if (choice === "1") {
-                if (horse.includes("уздечка")) {
-                    alert("Вы уже надели уздеку");
-                } else if (inventory.includes("уздечка")) {
-                    horse.push("уздечка")
-                    inventory.splice(inventory.indexOf("уздечка"), 1);
-                    alert("вы надели уздечку")
-                } else {
-                    alert("для начала возьмите уздечку")
+            let saddling = true;
+            while (saddling) {
+                const choice2 = prompt(
+                    "1 — надеть уздечку\n" +
+                    "2 — надеть вальтрап\n" +
+                    "3 — надеть седло\n" +
+                    "4 — надеть подпругу\n" +
+                    "0 — отмена"
+                );
+                if (choice2 === "0") {
+                    saddling = false;
                 }
-            }
-            else if (choice === "2") {
-                if (!horse.includes("уздечка")) {
-                    alert("Сначала наденьте уздечку")
-                } else if (horse.includes("вальтрап")) {
-                    alert("Вы уже надели вальтрап");
-                } else if (inventory.includes("вальтрап")) {
-                    horse.push("вальтрап")
-                    inventory.splice(inventory.indexOf("вальтрап"), 1);
-                    alert("вы надели вальтрап")
-                } else {
-                    alert("для начала возьмите вальтрап")
+                else if (choice2 === "1") {
+                    if (horse.includes("уздечка")) {
+                        alert("Вы уже надели уздеку");
+                    } else if (inventory.includes("уздечка")) {
+                        horse.push("уздечка")
+                        inventory.splice(inventory.indexOf("уздечка"), 1);
+                        alert("вы надели уздечку")
+                    } else {
+                        alert("для начала возьмите уздечку")
+                    }
+                }
+                else if (choice2 === "2") {
+                    if (!horse.includes("уздечка")) {
+                        alert("Сначала наденьте уздечку")
+                    } else if (horse.includes("вальтрап")) {
+                        alert("Вы уже надели вальтрап");
+                    } else if (inventory.includes("вальтрап")) {
+                        horse.push("вальтрап")
+                        inventory.splice(inventory.indexOf("вальтрап"), 1);
+                        alert("вы надели вальтрап")
+                    } else {
+                        alert("для начала возьмите вальтрап")
+                    }
+
+                } else if (choice2 === "3") {
+                    if (!horse.includes("вальтрап")) {
+                        alert("сначала наденьте вальтрап")
+                    } else if (horse.includes("седло")) {
+                        alert("Вы уже надели седло");
+                    } else if (inventory.includes("седло")) {
+                        horse.push("седло")
+                        inventory.splice(inventory.indexOf("седло"), 1);
+                        alert("вы надели седло")
+                    } else {
+                        alert("для начала возьмите седло")
+                    }
+                }
+                else if (choice2 === "4") {
+                    if (!horse.includes("седло")) {
+                        alert("сначала наденьте седло")
+                    } else if (horse.includes("подпруга")) {
+                        alert("Вы уже надели подпругу");
+                    } else if (inventory.includes("подпруга")) {
+                        horse.push("подпруга")
+                        inventory.splice(inventory.indexOf("подпруга"), 1);
+                        alert("вы надели подпругу")
+                    } else {
+                        alert("для начала возьмите подпругу")
+                    }
                 }
 
-            } else if (choice === "3") {
-                if (!horse.includes("вальтрап")) {
-                    alert("сначала наденьте вальтрап")
-                } else if (horse.includes("седло")) {
-                    alert("Вы уже надели седло");
-                } else if (inventory.includes("седло")) {
-                    horse.push("седло")
-                    inventory.splice(inventory.indexOf("седло"), 1);
-                    alert("вы надели седло")
-                } else {
-                    alert("для начала возьмите седло")
+                else {
+                    alert("Такого действия нет.");
                 }
             }
-            else if (choice === "4") {
-                if (!horse.includes("седло")) {
-                    alert("сначала наденьте седло")
-                } else if (horse.includes("подпруга")) {
-                    alert("Вы уже надели подпругу");
-                } else if (inventory.includes("подпруга")) {
-                    horse.push("подпруга")
-                    inventory.splice(inventory.indexOf("подпруга"), 1);
-                    alert("вы надели подпругу")
-                } else {
-                    alert("для начала возьмите подпругу")
-                }
-            }
-
-        } else {
-            alert("Такого действия нет.");
         }
     }
 
@@ -517,9 +533,9 @@ while (true) {
                 break
             } else {
                 if (fedHorse === true) {
-                    alert("тренировка прошла идеально")
+                    alert("Тренировка прошла ИДЕАЛЬНО! Кузя был послушным, ведь вы его угощали!")
                 } else {
-                    alert("тренировка прошла хорошо")
+                    alert("Тренировка прошла хорошо. Но Кузя был ворчливым. Стоило его угостить.")
                 }
                 break
             }
