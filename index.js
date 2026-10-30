@@ -24,6 +24,7 @@ alert(
 );
 
 while (true) {
+    if (room === "конец") break;
     // УЛИЦА 
     if (room === "улица") {
         const choice = prompt(
@@ -137,7 +138,7 @@ while (true) {
         } else {
             alert("Такого действия нет.");
         }
-        if (room === "конец") break;
+        
     }
 
     // РАЗДЕВАЛКА 
@@ -215,7 +216,7 @@ while (true) {
 
     }
     // АМУНИЧНИК 
-    if (room === "амуничник") {
+    else if (room === "амуничник") {
         const choice = prompt(
             "АМУНИЧНИК\n" +
             "В амуничнике вы находите вашу стойку \n" +
